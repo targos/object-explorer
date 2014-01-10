@@ -2,7 +2,7 @@ define(function(){
     function BaseCriterion() {}
     BaseCriterion.prototype = {
         init : function(jpath,options) {
-            this.config(options);
+            this.configurate(options);
             this.jpath = jpath;
             this.canMiss = (typeof options.canMiss === 'boolean') ? options.canMiss : false;
         },
@@ -18,7 +18,18 @@ define(function(){
             if(value===undefined) return this.canMiss;
             return this.eval(value);
         },
-        config : function(options) {},
+        configurate : function(options) {
+            var config = this.config;
+            var comparator = options.comparator, comp, variables;
+            if(options.hasOwnProperty(comparator)) {
+                comp = options[comparator];
+                if(comp.variables)
+                    variables = comp.variables;
+                else
+                    variables = ["ref"]
+            }
+        },
+        config : {},
         eval : function(value) { return true; }
     }
     return BaseCriterion;

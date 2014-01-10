@@ -1,4 +1,4 @@
-define(function(){
+define(["jquery/jquery"],function(){
     function ObjectExplorer() {
         this.criteria = [];
     }
@@ -6,6 +6,7 @@ define(function(){
     ObjectExplorer.prototype = {
         addCriterion : function(type, jpath, options) {
             var that = this;
+            var def = $.Deferred();
             require(["criterion/"+type],function(Criterion) {
                 var criterion;
                 criterion = new Criterion();
@@ -15,7 +16,10 @@ define(function(){
                 }
                 else
                     console.log("unknown criterion");
+                def.resolve();
             });
+            
+            return def;
         },
         explore : function(obj) {
             var crit = this.criteria, i = 0, l = crit.length;

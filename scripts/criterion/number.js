@@ -3,22 +3,58 @@ define(["criterion/base","jquery/jquery"],function(BaseCriterion){
     $.extend(NumberCriterion.prototype, BaseCriterion.prototype);
 
     NumberCriterion.prototype.comparators = {
-        less : function(value) { return (value < this.ref); },
-        greater : function(value) { return (value > this.ref); },
-        lessOrEqual : function(value) { return (value <= this.ref); },
-        greaterOrEqual : function(value) { return (value >= this.ref); },
-        between : function(value) {
-            if(this.include) return (value >= this.lower && value <= this.upper);
-            else return (value > this.lower && value < this.upper);
+        less : function(value, options) { return (value < options.ref); },
+        greater : function(value, options) { return (value > options.ref); },
+        lessOrEqual : function(value, options) { return (value <= options.ref); },
+        greaterOrEqual : function(value, options) { return (value >= options.ref); },
+        between : function(value, options) {
+            if(options.include) return (value >= options.lower && value <= options.upper);
+            else return (value > options.lower && value < options.upper);
         },
-        outside : function(value) {
-            if(this.include) return (value <= this.lower || value >= this.upper);
-            else return (value < this.lower || value > this.upper);
+        outside : function(value, options) {
+            if(options.include) return (value <= options.lower || value >= options.upper);
+            else return (value < options.lower || value > options.upper);
         },
-        equal : function(value) { return value===this.ref; },
-        notEqual : function(value) { return value!==this.ref; }
+        equal : function(value, options) { return value===options.ref; },
+        notEqual : function(value, options) { return value!==options.ref; }
     };
-    NumberCriterion.prototype.config = function(options) {
+    NumberCriterion.prototype.config = {
+        comparators : {
+            less : {
+                identifiers : ["<"],
+            },
+            greater : {
+                identifiers : [">"]
+            },
+            lessOrEqual : {
+                identifiers : ["<="]
+            },
+            greaterOrEqual : {
+                identifiers : [">="]
+            },
+            between : {
+                identifiers : ["between","btw"],
+                variables : ["lower","upper","include"]
+            },
+            outside : {
+                identifiers : ["between","btw"],
+                variables : ["lower","upper","include"]
+            },
+            equal : {
+                identifiers : ["eq","=","==","==="]
+            },
+            notEqual : {
+                identifiers : ["neq","!=","!=="]
+            }
+        },
+        defaults : {
+            ref : 0,
+            lower : 0,
+            upper : 0,
+            include : false
+        }
+    };
+    /*NumberCriterion.prototype.config = function(options) {
         switch(options.comparator) {
             case "<":
                 this.comparator = this.comparators.less;
@@ -50,11 +86,11 @@ define(["criterion/base","jquery/jquery"],function(BaseCriterion){
                 break;
         }
         this.ref = options.ref;
-    };
-    NumberCriterion.prototype.eval = function(value) {
+    };*/
+    NumberCriterion.prototype.eval = function(value,options) {
         value = parseFloat(value);
         if(Number.isNaN(value)) return false;
-        return this.comparator(value);
+        return this.comparator(value,options);
     };
     return NumberCriterion;
 });
