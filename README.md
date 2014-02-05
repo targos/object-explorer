@@ -30,12 +30,10 @@ In this example, the criterion is a number. It evaluates to true if the value at
     var crit1 = new Criterion(/* Any basic criterion */);
     var crit2 = new Criterion(/* Any other basic criterion */);
 
-### Logical operators
+#### Logical operators
 
     var crit3 = crit1.and(crit2); // Both criterions must be true
     var crit4 = crit1.or(crit2); // Any criterion must be true
     var crit5 = crit1.not() // Criterion must be false
     var crit6 = crit1.eqv(crit2); // Criterions must return the same value
     var crit7 = crit1.neqv(crit2); // Criterions must return a different value
-
-### Compile a criterion
